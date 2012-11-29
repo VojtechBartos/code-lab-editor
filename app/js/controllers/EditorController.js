@@ -2,6 +2,9 @@
 
 codeEditor.controller('EditorController', function EditorController($scope, $routeParams, socketService, user) {
 
+	var cursor = {row: 0, column: 0};
+	var selection = {start: cursor, end: cursor};
+
 	// if user is not defined, generate new hash user
 	if(!user.hash)
 		user.hash = randomString(6);
@@ -20,7 +23,9 @@ codeEditor.controller('EditorController', function EditorController($scope, $rou
 	socketService.on('init', function (data) {
 		editor.setValue(data.text);
 		editor.getSession().setMode("ace/mode/" + data.syntax);
-		
+	    editor.moveCursorToPosition(cursor);
+	    editor.getSelection().setRange(selection);
+
 		$scope.syntax = data.syntax;
 		$scope.$apply();
 
@@ -28,7 +33,11 @@ codeEditor.controller('EditorController', function EditorController($scope, $rou
 	});
 
 	// updates text and syntax
-	socketService.on('updateText', function (data) { editor.setValue(data.text); });
+	socketService.on('updateText', function (data) { 
+		editor.setValue(data.text); 
+		editor.moveCursorToPosition(cursor);
+	    editor.getSelection().setRange({start: cursor, end: cursor});
+	});
 	socketService.on('updateSyntax', function (syntax) {
 		editor.getSession().setMode("ace/mode/" + syntax);
 
@@ -36,7 +45,6 @@ codeEditor.controller('EditorController', function EditorController($scope, $rou
 		$scope.$apply();
 	});
 
-	
 
 	/**
 	 * Watchers
@@ -44,27 +52,32 @@ codeEditor.controller('EditorController', function EditorController($scope, $rou
 
 	// code editor
     $scope.$watch('editor', function(){
-    	if(inited == true)
+    	if(inited == true){
 			socketService.emit('updateText', {
 			  	document: $routeParams.document, 
 			  	text: editor.getValue()
 			});
+
+			cursor = editor.selection.getCursor();
+			console.log(cursor);
+		}
     }, true);
 
     // syntax selection
-    $scope.$watch('syntax', function(){
-    	editor.getSession().setMode("ace/mode/" + $scope.syntax);
+	$scope.$watch('syntax', function(){
+		editor.getSession().setMode("ace/mode/" + $scope.syntax);
 
-    	if(inited == true)
-    		socketService.emit('updateSyntax', { document: $routeParams.document, syntax: $scope.syntax });
-    }, true);
+		if(inited == true)
+			socketService.emit('updateSyntax', { document: $routeParams.document, syntax: $scope.syntax });
+	}, true);
 
-    // local theme selection
-    $scope.$watch('theme', function(){
-    	editor.setTheme($scope.theme);
+	// local theme selection
+	$scope.$watch('theme', function(){
+		editor.setTheme($scope.theme);
 
-    	user.theme = $scope.theme;
-    }, true);
+		user.theme = $scope.theme;
+	}, true);
 
 
 });
+

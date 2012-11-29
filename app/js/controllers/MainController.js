@@ -3,7 +3,7 @@
 codeEditor.controller('MainController', function MainController($scope, $location) {
 
     $scope.createNewEditor = function(){
-    	// redirect
+		// redirect
 		$location.path('/editor/' + randomString(6));
     };	
 
