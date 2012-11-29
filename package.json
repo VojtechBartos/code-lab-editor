@@ -1,0 +1,17 @@
+{
+    "name": "CodeLabEdit",
+    "version": "0.0.1",
+    "description": "Simple real-time collaborative code editor based on AngularJS and Socket.IO.",
+    "keywords": [],
+    "author": "Vojtěch Bartoš <me@vojtechbartos.cz>",
+    "main": "run.js",
+    "dependencies": {
+        "express": ">= 3.0.3",
+        "socket.io": ">= 0.9.11"
+    },
+    "engines": {
+        "node": ">= 0.8.x",
+        "npm": "1.1.x"
+    },
+    "license": "MIT"
+}
