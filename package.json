@@ -3,6 +3,10 @@
     "version": "0.0.1",
     "description": "Simple real-time collaborative code editor based on AngularJS and Socket.IO.",
     "keywords": [],
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/VojtechBartos/CodeLabEdit.git"
+    },
     "author": "Vojtěch Bartoš <me@vojtechbartos.cz>",
     "main": "run.js",
     "dependencies": {
