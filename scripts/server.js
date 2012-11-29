@@ -51,6 +51,12 @@ exports.start = function(process){
 	};
 
 	// socket.io
+	// assuming io is the Socket.IO server object
+	// this is not necessary, is needed because heroku hosting
+	io.configure(function () { 
+		io.set("transports", ["xhr-polling"]); 
+		io.set("polling duration", 10); 
+	});
 	io.sockets.on('connection', function (socket) {
 		// INIT
 		socket.on('init', function (data) {
