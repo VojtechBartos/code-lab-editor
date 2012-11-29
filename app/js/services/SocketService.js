@@ -1,5 +1,5 @@
 'use strict';
 
 codeEditor.service('socketService', function SocketService() {
-	return io.connect('http://localhost:5000');;
+	return io.connect('http://:5000');;
 });
